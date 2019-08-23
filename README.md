@@ -1,10 +1,5 @@
-# Social Profiling
+# Detecting offensive comments
 
-### Detecting offensive comments using deep learning
-
-Social profiling is a tool which detects racist, sexist and offensive text by leveraging NLP and Deep learning. 
-
-*If you want to run this [tool](https://github.wdf.sap.corp/I504969/SocialProfiling#how-to-run).*
 
 ![alt text](https://github.com/Purvak-L/DetectingOffensiveText/blob/master/images/ML%20Pipeline.png)
 
@@ -206,32 +201,3 @@ Note: extract_tweets.py will need consumer keys and access token. It can be gene
 | --- | --- | --- |
 |ULMFit |	85.27% |	NA |	
 |BERT | NA |	93.45%|
-
-
-## How to Run
-
-1. Download the Github Repository.
-
- ``` git clone https://github.wdf.sap.corp/I504969/SocialProfiling ```
-
-2. Install the requirements.
-
- ``` pip install -r requirements.txt```
-
-3. Create directory named ```models``` and add [ULMFiT Pre-trained model](https://sapnam-my.sharepoint.com/:f:/g/personal/purvak_lapsiya_sap_com/EqucAh-FeaZPuw-wkHXfLTsBHoP_7fsS7ghG8zZrwRv9Uw?e=Dqodb9)
-
-4. Navigate to Root folder of SocialProfiling-master and start the flask server.
-
- ``` python flaskblog.py```
-
-5. Navigate to http://127.0.0.1:5000/login or the port where your server started.
-
-6. Enter the twitter handle of user you want to evaluate and type in any password.
-
- ![alt text](https://github.com/Purvak-L/DetectingOffensiveText/blob/master/images/Login.png)
-
-7. Wait for few minutes and results will be displayed in form of table.
-
- ![alt text](https://github.com/Purvak-L/DetectingOffensiveText/blob/master/images/Results.png)
-
-
