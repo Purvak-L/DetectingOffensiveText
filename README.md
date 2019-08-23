@@ -6,7 +6,7 @@ Social profiling is a tool which detects racist, sexist and offensive text by le
 
 *If you want to run this [tool](https://github.wdf.sap.corp/I504969/SocialProfiling#how-to-run).*
 
-![alt text](https://github.wdf.sap.corp/I504969/SocialProfiling/blob/master/images/ML%20Pipeline.png)
+![alt text](https://github.com/Purvak-L/DetectingOffensiveText/blob/master/images/ML%20Pipeline.png)
 
 ## Data Collection
 
@@ -160,7 +160,7 @@ It's recommended to run this notebook on colab.
 
 The entire training and serving of BERT Based deep learning model can be found ``` BERT_Training_Serving.ipynb ```. This relies on cased version of BERT. BERT here is tested on hatespeech data which classifies offensive language vs not offensive language. This model was developed with idea of using it as first layer of classification between text. Training it on dataset provided with 93.5% accuracy.
 
-![alt_text](https://github.wdf.sap.corp/I504969/SocialProfiling/blob/master/images/Screen%20Shot%202019-08-19%20at%204.44.46%20PM.png)
+![alt_text](https://github.com/Purvak-L/DetectingOffensiveText/blob/master/images/Screen%20Shot%202019-08-19%20at%204.44.46%20PM.png)
 
 ## Front-end and Flask Framework
 
@@ -228,10 +228,10 @@ Note: extract_tweets.py will need consumer keys and access token. It can be gene
 
 6. Enter the twitter handle of user you want to evaluate and type in any password.
 
- ![alt text](https://github.wdf.sap.corp/I504969/SocialProfiling/blob/master/images/Login.png)
+ ![alt text](https://github.com/Purvak-L/DetectingOffensiveText/blob/master/images/Login.png)
 
 7. Wait for few minutes and results will be displayed in form of table.
 
- ![alt text](https://github.wdf.sap.corp/I504969/SocialProfiling/blob/master/images/Results.png)
+ ![alt text](https://github.com/Purvak-L/DetectingOffensiveText/blob/master/images/Results.png)
 
 
