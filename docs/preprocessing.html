@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>SocialProfiling-master.preprocessing API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>SocialProfiling-master.preprocessing</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">import re, string, unicodedata
+import nltk
+import contractions
+import inflect
+import string
+import unicodedata
+import re
+from bs4 import BeautifulSoup
+from nltk import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import LancasterStemmer, WordNetLemmatizer
+import pandas as pd
+
+class PreprocessingPipeline:
+    
+    def __init__(self):
+        self.document = &#39;document&#39;
+    
+    def remove_strip_links(self,text):
+        link_regex    = re.compile(&#39;((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&amp;](#!)?)*)&#39;, re.DOTALL)
+        links         = re.findall(link_regex, text)
+        for link in links:
+            text = text.replace(link[0], &#39;, &#39;)    
+        return text
+    
+    def strip_mentions_hashtags(self, text):
+        entity_prefixes = [&#39;@&#39;,&#39;#&#39;]
+        for separator in  string.punctuation:
+            if separator not in entity_prefixes :
+                text = text.replace(separator,&#39; &#39;)
+        words = []
+        for word in text.split():
+            word = word.strip()
+            if word:
+                if word[0] not in entity_prefixes:
+                    words.append(word)
+        return &#39; &#39;.join(words)
+    
+    def remove_special_characters(text, remove_digits=False):
+        pattern = r&#39;[^a-zA-z0-9\s]&#39; if not remove_digits else r&#39;[^a-zA-z\s]&#39;
+        text = re.sub(pattern, &#39;&#39;, text)
+        #text = unicodedata.normalize(&#39;NFKD&#39;, text).encode(&#39;ascii&#39;, &#39;ignore&#39;).decode(&#39;utf-8&#39;, &#39;ignore&#39;)
+        return text
+        
+    def remove_non_ascii(self, words):
+        &#34;&#34;&#34;Remove non-ASCII characters from list of tokenized words&#34;&#34;&#34;
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            new_word = unicodedata.normalize(&#39;NFKD&#39;, word).encode(&#39;ascii&#39;, &#39;ignore&#39;).decode(&#39;utf-8&#39;, &#39;ignore&#39;)
+            new_words.append(new_word)
+        return &#39; &#39;.join(new_words)
+
+    def to_lowercase(self, words):
+        &#34;&#34;&#34;Convert all characters to lowercase from list of tokenized words&#34;&#34;&#34;
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            new_word = word.lower()
+            new_words.append(new_word)
+        return &#39; &#39;.join(new_words)
+
+    def remove_punctuation(self, words):
+        &#34;&#34;&#34;Remove punctuation from list of tokenized words&#34;&#34;&#34;
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            new_word = re.sub(r&#39;[^\w\s]&#39;, &#39;&#39;, word)
+            if new_word != &#39;&#39;:
+                new_words.append(new_word)
+        return &#39; &#39;.join(new_words)
+
+    def replace_numbers(self, words):
+        &#34;&#34;&#34;Replace all interger occurrences in list of tokenized words with textual representation&#34;&#34;&#34;
+        p = inflect.engine()
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            if word.isdigit():
+                new_word = p.number_to_words(word)
+                new_words.append(new_word)
+            else:
+                new_words.append(word)
+        return &#39; &#39;.join(new_words)
+
+    def remove_stopwords(self,words):
+        &#34;&#34;&#34;Remove stop words from list of tokenized words&#34;&#34;&#34;
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            if word not in stopwords.words(&#39;english&#39;):
+                new_words.append(word)
+        return &#39; &#39;.join(new_words)
+
+    def stem_words(self, words):
+        &#34;&#34;&#34;Stem words in list of tokenized words&#34;&#34;&#34;
+        stemmer = LancasterStemmer()
+        stems = []
+        for word in words.split():
+            word = word.strip()
+            stem = stemmer.stem(word)
+            stems.append(stem)
+        return &#39; &#39;.join(stems)
+
+    def lemmatize_verbs(self, words):
+        &#34;&#34;&#34;Lemmatize verbs in list of tokenized words&#34;&#34;&#34;
+        lemmatizer = WordNetLemmatizer()
+        lemmas = []
+        for word in words.split():
+            word = word.strip()
+            lemma = lemmatizer.lemmatize(word, pos=&#39;v&#39;)
+            lemmas.append(lemma)
+        return &#39; &#39;.join(lemmas)
+
+    def normalize(self, words):
+        words = self.remove_strip_links(words)
+        words = self.strip_mentions_hashtags(words)
+        words = self.remove_non_ascii(words)
+        words = self.to_lowercase(words)
+        words = self.remove_punctuation(words)
+        words = self.replace_numbers(words)
+        words = self.remove_stopwords(words)
+        return words
+
+
+if __name__ == &#39;__main__&#39;:
+    instance = PreprocessingPipeline()
+    df_new = pd.read_csv(&#39;hatespeech.csv&#39;)
+    hs = pd.read_csv(&#39;hatespeech.csv&#39;, encoding=&#34;ISO-8859-1&#34;,index_col=6, keep_default_na=False)
+    #print(hs.head())
+
+    orig = pd.read_csv(&#39;NAACL_SRW_2016.csv&#39;, index_col=0, header=None)
+    orig.index.name = &#39;ID&#39;
+    orig = orig.rename(columns={1: &#39;Class&#39;})
+    orig.index = orig.index.astype(str)
+    #print(orig.head())
+
+    #merging the two dataframes
+    hs = pd.merge(hs, orig, how=&#39;inner&#39;, left_index=True, right_index=True)
+    #print(hs.head())
+    df_new = hs
+    df_new = df_new.dropna()
+    df_new = df_new[[&#39;Tweets&#39;,&#39;Class&#39;]]
+
+#     df = pd.read_csv(&#39;new_hatespeech_processed.csv&#39;,encoding=&#34;ISO-8859-1&#34;)
+#     df_new = df[[&#39;tweet_id&#39;,&#39;does_this_tweet_contain_hate_speech&#39;,&#39;tweet_text&#39;]]
+#     df_new = df_new.dropna()
+#     df_new.columns = [&#39;ID&#39;,&#39;label&#39;,&#39;data&#39;]
+
+    #df_new.columns = [&#39;data&#39;,&#39;label&#39;]
+    df_new[&#39;data&#39;] = df_new[&#39;data&#39;].apply(lambda x: instance.normalize(x))
+    df_new.to_csv(&#39;new_hatespeech_processed.csv&#39;)
+
+    print(&#34;Done!&#34;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline"><code class="flex name class">
+<span>class <span class="ident">PreprocessingPipeline</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PreprocessingPipeline:
+    
+    def __init__(self):
+        self.document = &#39;document&#39;
+    
+    def remove_strip_links(self,text):
+        link_regex    = re.compile(&#39;((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&amp;](#!)?)*)&#39;, re.DOTALL)
+        links         = re.findall(link_regex, text)
+        for link in links:
+            text = text.replace(link[0], &#39;, &#39;)    
+        return text
+    
+    def strip_mentions_hashtags(self, text):
+        entity_prefixes = [&#39;@&#39;,&#39;#&#39;]
+        for separator in  string.punctuation:
+            if separator not in entity_prefixes :
+                text = text.replace(separator,&#39; &#39;)
+        words = []
+        for word in text.split():
+            word = word.strip()
+            if word:
+                if word[0] not in entity_prefixes:
+                    words.append(word)
+        return &#39; &#39;.join(words)
+    
+    def remove_special_characters(text, remove_digits=False):
+        pattern = r&#39;[^a-zA-z0-9\s]&#39; if not remove_digits else r&#39;[^a-zA-z\s]&#39;
+        text = re.sub(pattern, &#39;&#39;, text)
+        #text = unicodedata.normalize(&#39;NFKD&#39;, text).encode(&#39;ascii&#39;, &#39;ignore&#39;).decode(&#39;utf-8&#39;, &#39;ignore&#39;)
+        return text
+        
+    def remove_non_ascii(self, words):
+        &#34;&#34;&#34;Remove non-ASCII characters from list of tokenized words&#34;&#34;&#34;
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            new_word = unicodedata.normalize(&#39;NFKD&#39;, word).encode(&#39;ascii&#39;, &#39;ignore&#39;).decode(&#39;utf-8&#39;, &#39;ignore&#39;)
+            new_words.append(new_word)
+        return &#39; &#39;.join(new_words)
+
+    def to_lowercase(self, words):
+        &#34;&#34;&#34;Convert all characters to lowercase from list of tokenized words&#34;&#34;&#34;
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            new_word = word.lower()
+            new_words.append(new_word)
+        return &#39; &#39;.join(new_words)
+
+    def remove_punctuation(self, words):
+        &#34;&#34;&#34;Remove punctuation from list of tokenized words&#34;&#34;&#34;
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            new_word = re.sub(r&#39;[^\w\s]&#39;, &#39;&#39;, word)
+            if new_word != &#39;&#39;:
+                new_words.append(new_word)
+        return &#39; &#39;.join(new_words)
+
+    def replace_numbers(self, words):
+        &#34;&#34;&#34;Replace all interger occurrences in list of tokenized words with textual representation&#34;&#34;&#34;
+        p = inflect.engine()
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            if word.isdigit():
+                new_word = p.number_to_words(word)
+                new_words.append(new_word)
+            else:
+                new_words.append(word)
+        return &#39; &#39;.join(new_words)
+
+    def remove_stopwords(self,words):
+        &#34;&#34;&#34;Remove stop words from list of tokenized words&#34;&#34;&#34;
+        new_words = []
+        for word in words.split():
+            word = word.strip()
+            if word not in stopwords.words(&#39;english&#39;):
+                new_words.append(word)
+        return &#39; &#39;.join(new_words)
+
+    def stem_words(self, words):
+        &#34;&#34;&#34;Stem words in list of tokenized words&#34;&#34;&#34;
+        stemmer = LancasterStemmer()
+        stems = []
+        for word in words.split():
+            word = word.strip()
+            stem = stemmer.stem(word)
+            stems.append(stem)
+        return &#39; &#39;.join(stems)
+
+    def lemmatize_verbs(self, words):
+        &#34;&#34;&#34;Lemmatize verbs in list of tokenized words&#34;&#34;&#34;
+        lemmatizer = WordNetLemmatizer()
+        lemmas = []
+        for word in words.split():
+            word = word.strip()
+            lemma = lemmatizer.lemmatize(word, pos=&#39;v&#39;)
+            lemmas.append(lemma)
+        return &#39; &#39;.join(lemmas)
+
+    def normalize(self, words):
+        words = self.remove_strip_links(words)
+        words = self.strip_mentions_hashtags(words)
+        words = self.remove_non_ascii(words)
+        words = self.to_lowercase(words)
+        words = self.remove_punctuation(words)
+        words = self.replace_numbers(words)
+        words = self.remove_stopwords(words)
+        return words</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.lemmatize_verbs"><code class="name flex">
+<span>def <span class="ident">lemmatize_verbs</span></span>(<span>self, words)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Lemmatize verbs in list of tokenized words</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def lemmatize_verbs(self, words):
+    &#34;&#34;&#34;Lemmatize verbs in list of tokenized words&#34;&#34;&#34;
+    lemmatizer = WordNetLemmatizer()
+    lemmas = []
+    for word in words.split():
+        word = word.strip()
+        lemma = lemmatizer.lemmatize(word, pos=&#39;v&#39;)
+        lemmas.append(lemma)
+    return &#39; &#39;.join(lemmas)</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.normalize"><code class="name flex">
+<span>def <span class="ident">normalize</span></span>(<span>self, words)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def normalize(self, words):
+    words = self.remove_strip_links(words)
+    words = self.strip_mentions_hashtags(words)
+    words = self.remove_non_ascii(words)
+    words = self.to_lowercase(words)
+    words = self.remove_punctuation(words)
+    words = self.replace_numbers(words)
+    words = self.remove_stopwords(words)
+    return words</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_non_ascii"><code class="name flex">
+<span>def <span class="ident">remove_non_ascii</span></span>(<span>self, words)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Remove non-ASCII characters from list of tokenized words</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_non_ascii(self, words):
+    &#34;&#34;&#34;Remove non-ASCII characters from list of tokenized words&#34;&#34;&#34;
+    new_words = []
+    for word in words.split():
+        word = word.strip()
+        new_word = unicodedata.normalize(&#39;NFKD&#39;, word).encode(&#39;ascii&#39;, &#39;ignore&#39;).decode(&#39;utf-8&#39;, &#39;ignore&#39;)
+        new_words.append(new_word)
+    return &#39; &#39;.join(new_words)</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_punctuation"><code class="name flex">
+<span>def <span class="ident">remove_punctuation</span></span>(<span>self, words)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Remove punctuation from list of tokenized words</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_punctuation(self, words):
+    &#34;&#34;&#34;Remove punctuation from list of tokenized words&#34;&#34;&#34;
+    new_words = []
+    for word in words.split():
+        word = word.strip()
+        new_word = re.sub(r&#39;[^\w\s]&#39;, &#39;&#39;, word)
+        if new_word != &#39;&#39;:
+            new_words.append(new_word)
+    return &#39; &#39;.join(new_words)</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_special_characters"><code class="name flex">
+<span>def <span class="ident">remove_special_characters</span></span>(<span>text, remove_digits=False)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_special_characters(text, remove_digits=False):
+    pattern = r&#39;[^a-zA-z0-9\s]&#39; if not remove_digits else r&#39;[^a-zA-z\s]&#39;
+    text = re.sub(pattern, &#39;&#39;, text)
+    #text = unicodedata.normalize(&#39;NFKD&#39;, text).encode(&#39;ascii&#39;, &#39;ignore&#39;).decode(&#39;utf-8&#39;, &#39;ignore&#39;)
+    return text</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_stopwords"><code class="name flex">
+<span>def <span class="ident">remove_stopwords</span></span>(<span>self, words)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Remove stop words from list of tokenized words</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_stopwords(self,words):
+    &#34;&#34;&#34;Remove stop words from list of tokenized words&#34;&#34;&#34;
+    new_words = []
+    for word in words.split():
+        word = word.strip()
+        if word not in stopwords.words(&#39;english&#39;):
+            new_words.append(word)
+    return &#39; &#39;.join(new_words)</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_strip_links"><code class="name flex">
+<span>def <span class="ident">remove_strip_links</span></span>(<span>self, text)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_strip_links(self,text):
+    link_regex    = re.compile(&#39;((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&amp;](#!)?)*)&#39;, re.DOTALL)
+    links         = re.findall(link_regex, text)
+    for link in links:
+        text = text.replace(link[0], &#39;, &#39;)    
+    return text</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.replace_numbers"><code class="name flex">
+<span>def <span class="ident">replace_numbers</span></span>(<span>self, words)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Replace all interger occurrences in list of tokenized words with textual representation</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def replace_numbers(self, words):
+    &#34;&#34;&#34;Replace all interger occurrences in list of tokenized words with textual representation&#34;&#34;&#34;
+    p = inflect.engine()
+    new_words = []
+    for word in words.split():
+        word = word.strip()
+        if word.isdigit():
+            new_word = p.number_to_words(word)
+            new_words.append(new_word)
+        else:
+            new_words.append(word)
+    return &#39; &#39;.join(new_words)</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.stem_words"><code class="name flex">
+<span>def <span class="ident">stem_words</span></span>(<span>self, words)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Stem words in list of tokenized words</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def stem_words(self, words):
+    &#34;&#34;&#34;Stem words in list of tokenized words&#34;&#34;&#34;
+    stemmer = LancasterStemmer()
+    stems = []
+    for word in words.split():
+        word = word.strip()
+        stem = stemmer.stem(word)
+        stems.append(stem)
+    return &#39; &#39;.join(stems)</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.strip_mentions_hashtags"><code class="name flex">
+<span>def <span class="ident">strip_mentions_hashtags</span></span>(<span>self, text)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def strip_mentions_hashtags(self, text):
+    entity_prefixes = [&#39;@&#39;,&#39;#&#39;]
+    for separator in  string.punctuation:
+        if separator not in entity_prefixes :
+            text = text.replace(separator,&#39; &#39;)
+    words = []
+    for word in text.split():
+        word = word.strip()
+        if word:
+            if word[0] not in entity_prefixes:
+                words.append(word)
+    return &#39; &#39;.join(words)</code></pre>
+</details>
+</dd>
+<dt id="SocialProfiling-master.preprocessing.PreprocessingPipeline.to_lowercase"><code class="name flex">
+<span>def <span class="ident">to_lowercase</span></span>(<span>self, words)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Convert all characters to lowercase from list of tokenized words</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def to_lowercase(self, words):
+    &#34;&#34;&#34;Convert all characters to lowercase from list of tokenized words&#34;&#34;&#34;
+    new_words = []
+    for word in words.split():
+        word = word.strip()
+        new_word = word.lower()
+        new_words.append(new_word)
+    return &#39; &#39;.join(new_words)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="SocialProfiling-master" href="index.html">SocialProfiling-master</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline">PreprocessingPipeline</a></code></h4>
+<ul class="">
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.lemmatize_verbs" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.lemmatize_verbs">lemmatize_verbs</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.normalize" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.normalize">normalize</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_non_ascii" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_non_ascii">remove_non_ascii</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_punctuation" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_punctuation">remove_punctuation</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_special_characters" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_special_characters">remove_special_characters</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_stopwords" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_stopwords">remove_stopwords</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_strip_links" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.remove_strip_links">remove_strip_links</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.replace_numbers" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.replace_numbers">replace_numbers</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.stem_words" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.stem_words">stem_words</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.strip_mentions_hashtags" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.strip_mentions_hashtags">strip_mentions_hashtags</a></code></li>
+<li><code><a title="SocialProfiling-master.preprocessing.PreprocessingPipeline.to_lowercase" href="#SocialProfiling-master.preprocessing.PreprocessingPipeline.to_lowercase">to_lowercase</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
